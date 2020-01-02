@@ -1,42 +1,170 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <title>Tel</title>
-     <style>
-          html {
-               background: rgb(31, 31, 31);
-          }
-          #box {
-               position: fixed;
-               top: 50%;
-               left: 50%;
-               transform: translate(-50%, -50%);
-               text-align: center;
-               width: 250px;
-               height: 250px;
-               color: rgb(94, 228, 251);
-               border: 1px solid rgb(94, 228, 251);
-          }
-          #color {
-               color: rgb(94, 228, 251);
-               font-size: 20px;
-               font-weight: 600;
-               transition: color 250ms;
-          }
-          #color:hover {
-               color: rgb(94, 288, 221);    
-          }
-     </style>
+	<title>Fetch Me</title>
+	<style>
+		html {
+			color: whitesmoke;
+			background: hsl(198, 31%, 11%);
+		}
+		.container {
+			height: 600px;
+			width: 500px;
+			position: absolute;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			display: flex;
+			justify-content: flex-start;
+			flex-direction: column;
+		}
+		.btn {
+			padding: 15px;
+			margin: 20px;
+			margin-top: 30px;
+			text-align: center;
+		}
+		#get-btn,
+		#post-btn {
+			border: 5px solid black;
+			width: 100px;
+			height: 100px;
+			padding: 3px;
+			text-transform: uppercase;
+			background: orangered;
+			color: rgb(31, 31, 31);
+			font-weight: 600;
+			cursor: pointer;
+			transition: background 250ms;
+		}
+		#get-btn:hover,
+		#post-btn:hover {
+			background: black;
+			color: orangered;
+			border-color: orangered;
+		}
+		.data {
+			padding: 10px;
+			margin: 20px;
+			margin-top: 5px;
+			text-align: center;
+			border: 3px solid blueviolet;
+		}
+		.phone {
+			color: orangered;
+			transition: color 0.5s;
+		}
+		.phone:hover {
+			color: rgb(255, 113, 61);
+		}
+		a {
+			color: skyblue;
+			text-decoration: none;
+			transition: color 0.5s;
+		}
+		a:hover {
+			color: #4abdeb;
+		}
+		ul {
+			list-style: none;
+		}
+		li {
+			padding: 5px;
+			margin: 10px 40px 0 0;
+			border: 2px solid purple;
+			font-weight: 600;
+		}
+		.hide {
+			display: none;
+		}
+	</style>
 </head>
-     <body>
-          <div id="box">
-               <div style="height: 40px"></div>
-               <h1>Call Me</h1>
-               <div style="height: 25px"></div>
-               <a href="tel:+972504816306" id="color">+972-52-247-6969</a>
-          </div>
-     </body>
+	<body>
+		<div class="container">
+			<div class="btn">
+				<span id="get-btn">get data</span>
+				<span id="post-btn">post data</span>
+			</div>
+			<div id="get-data">
+				<div id="list"></div>
+			</div>
+			<div id="post-data">
+				<form id="post-form">
+					<div>
+						<input type="text" placeholder="Title" id="title">
+					</div>
+					<div>
+						<input type="textarea" placeholder="Body" id="body">
+					</div>
+					<input type="submit" value="SUBMIT">
+				</form>
+			</div>
+		</div>
+
+
+		<script>
+
+			document.getElementById('get-btn').addEventListener('click', getData)
+			document.getElementById('post-btn').addEventListener('click', postData)
+			document.getElementById('post-form').addEventListener('submit', addPost)
+
+			function getData() {
+				fetch('https://jsonplaceholder.typicode.com/users')
+				.then(res => res.json())
+				.then((users) => {
+					let output = '<h3 style="text-decoration: underline;">User List</h3>'
+					output += '<ul>'
+					
+					users.forEach((user) => {
+						output += `<li>${user.name}
+									<br>
+									<a href="mailto:${user.email}?subject=Hello!" class="mail">${user.email}</a>
+									<br>
+									<a href="tel:${user.phone}" class="phone">${user.phone}</a>
+								 </li>`
+					})
+
+					output += '</ul>'
+
+					document.getElementById('list').innerHTML = output
+					document.getElementById('get-data').classList.add('data')
+				})
+			}
+
+			function postData() {
+				document.getElementById('get-data').classList.add('hide')
+			}
+
+			function addPost(event) {
+				event.preventDetault()
+
+				let title = document.getElementById('title')
+				let body = document.getElementById('body')
+
+				const post = {
+					title: title,
+					body: body
+				}
+
+				fetch('https://jsonplaceholder.typicode.com/posts', {
+					method: 'POST',
+					headers: { 
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(post)
+
+				}).then((res) => res.json())
+				  .then((res) => {
+					  if (res.ok) {
+						  return res.json()
+					  } else {
+						  return Promise.reject({status: res.status, statusText: res.statusText})
+					  }
+				  }).then(data => console.log(data))
+				    .catch(err => console.error(err.statusText))
+
+			}
+
+		</script>
+	</body>
 </html>

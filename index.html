@@ -24,8 +24,7 @@
 			margin-top: 30px;
 			text-align: center;
 		}
-		#get-btn,
-		#post-btn {
+		#get-btn {
 			border: 5px solid black;
 			width: 100px;
 			height: 100px;
@@ -37,8 +36,7 @@
 			cursor: pointer;
 			transition: background 250ms;
 		}
-		#get-btn:hover,
-		#post-btn:hover {
+		#get-btn:hover {
 			background: black;
 			color: orangered;
 			border-color: orangered;
@@ -74,47 +72,26 @@
 			border: 2px solid purple;
 			font-weight: 600;
 		}
-		.hide {
-			display: none;
-		}
 	</style>
 </head>
 	<body>
 		<div class="container">
 			<div class="btn">
 				<span id="get-btn">get data</span>
-				<span id="post-btn">post data</span>
 			</div>
 			<div id="get-data">
 				<div id="list"></div>
 			</div>
-			<div id="post-data">
-				<form id="post-form">
-					<div>
-						<input type="text" placeholder="Title" id="title">
-					</div>
-					<div>
-						<input type="textarea" placeholder="Body" id="body">
-					</div>
-					<input type="submit" value="SUBMIT">
-				</form>
-			</div>
 		</div>
 
-
 		<script>
-
 			document.getElementById('get-btn').addEventListener('click', getData)
-			document.getElementById('post-btn').addEventListener('click', postData)
-			document.getElementById('post-form').addEventListener('submit', addPost)
-
 			function getData() {
 				fetch('https://jsonplaceholder.typicode.com/users')
 				.then(res => res.json())
 				.then((users) => {
 					let output = '<h3 style="text-decoration: underline;">User List</h3>'
 					output += '<ul>'
-					
 					users.forEach((user) => {
 						output += `<li>${user.name}
 									<br>
@@ -123,48 +100,11 @@
 									<a href="tel:${user.phone}" class="phone">${user.phone}</a>
 								 </li>`
 					})
-
 					output += '</ul>'
-
 					document.getElementById('list').innerHTML = output
 					document.getElementById('get-data').classList.add('data')
 				})
 			}
-
-			function postData() {
-				document.getElementById('get-data').classList.add('hide')
-			}
-
-			function addPost(event) {
-				event.preventDetault()
-
-				let title = document.getElementById('title')
-				let body = document.getElementById('body')
-
-				const post = {
-					title: title,
-					body: body
-				}
-
-				fetch('https://jsonplaceholder.typicode.com/posts', {
-					method: 'POST',
-					headers: { 
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(post)
-
-				}).then((res) => res.json())
-				  .then((res) => {
-					  if (res.ok) {
-						  return res.json()
-					  } else {
-						  return Promise.reject({status: res.status, statusText: res.statusText})
-					  }
-				  }).then(data => console.log(data))
-				    .catch(err => console.error(err.statusText))
-
-			}
-
 		</script>
 	</body>
 </html>

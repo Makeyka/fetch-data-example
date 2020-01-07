@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Get 'Em</title>
+        <meta charset="utf-8">
+        <style>
+            .border {
+                width: 300px;
+                height: 250px;
+                display: inline-block;
+                border: 1px solid rgb(31, 31, 31);
+                border-radius: 10px;
+            }
+            h3, button, li {
+                font-weight: 600;
+                text-transform: capitalize;
+            }
+            img {
+                padding: 10px;
+            }
+            li {
+                margin-right: 40px;
+                list-style-type: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="text-align: center;">
+            <h3>Pokemon ID:</h3>
+            <h1 id="pick"></h1>
+            <button id="btn">fetch</button>
+            <button id="ref">refresh</button>
+            <div id="list"></div>
+        </div>
+         <script>
+                var randomNum = (min, max) => {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+                
+                 
+                 var getRandomColor = () => {
+                  var letters = '0123456789ABCDEF';
+                  var color = '#';
+                  for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                  }
+                  return color;
+                }
+
+             
+             document.body.onload = function onLoad() {
+                 document.getElementById('pick').innerHTML = randomNum(1,100)
+                 document.getElementById('pick').style.color = getRandomColor() 
+
+             }
+
+             document.getElementById('ref').addEventListener('click', () => window.location.reload(false))
+             
+             document.getElementById('btn').addEventListener('click', () => {
+                 var url = 'https://pokeapi.co/api/v2/pokemon/'
+                 var pick = document.getElementById('pick').textContent
+                 
+                 fetch(url + pick)
+                 .then(res => res.json())
+                 .then((data) => {
+                     console.log(data)
+
+                     let html = '<h1>Your Pokemon is:</h1>'
+                     html += `<div>
+                                <h3 id="name">${data.forms[0].name}</h3> 
+                                <br>
+                                <div id="pokemon">
+                                    <img src="${data.sprites.back_default}" alt="poke">
+                                    <img src="${data.sprites.front_default}" alt="poke">
+                                    <br>
+                                    <img src="${data.sprites.front_shiny}" alt="poke">
+                                    <img src="${data.sprites.back_shiny}" alt="poke">
+                                </div>
+                             </div>`
+                     
+                     html += '<h3 id="ability">Abilities:</h3>'
+                     html += '<ul>'
+                     
+                     for(let x = 0; x < data.abilities.length; x++) {
+                         html += `<li> 
+                                    ${data.abilities[x].ability.name}
+                                  </li>`
+                     }
+                     html += '</ul>'
+                     
+                     document.getElementById('list').innerHTML = html
+                     document.getElementById('pokemon').classList.add('border')
+                     document.getElementById('name').style.color = getRandomColor()
+                     document.getElementById('ability').style.color = getRandomColor()
+                 })
+             })
+        </script>
+    </body>
+</html>

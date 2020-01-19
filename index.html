@@ -1,0 +1,138 @@
+<!DOCTYPEhtml>
+<html>
+    <head>
+        <style>
+            .container {
+                float: left;
+                width: 400px;
+                height: 700px;
+                padding: 100px;
+                margin: 10px 0 0 25px;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+                border: 2px solid rgb(31, 31, 31);
+            }
+            .mid-container {
+                float: left;
+                width: 400px;
+                height: 700px;
+                padding: 100px;
+                margin: 10px 0 0 25px;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+            }
+            .btn {
+                margin-top: -70px;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+            .loader {
+                width: 430px;
+                height: 300px;
+            }
+            .hide {
+                display: none;
+            }
+            .user-box {
+                margin: 5px;
+                padding-bottom: 20px;
+                font-size: 18px;
+                border: 2px solid rgb(31, 31, 31);
+            }
+            .user-container {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+            }
+            a {
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Users -->
+        <div class="container">
+            <div id="user-list"></div>
+        </div>
+        <!-- Mid -->
+        <div class="mid-container">
+            <div class="btn">
+                <span class="get-users">display</span>
+                <input type="number" value="5" min="1" max="5" id="number-of-users" style="width: 25px;">
+                <span class="get-users">users</span>
+            </div>
+            <div class="btn">
+                <span id="get-pokemons">display pokemons</span>
+            </div>
+            <div class="btn">
+                <span onclick="ref()">refresh page</span>
+            </div>
+        </div>
+        <!-- Pokemons -->
+        <div class="container">
+            <div id="pokemon-list"></div>
+        </div>
+        <script>
+            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Users ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            document.getElementsByClassName('get-users').forEach(addEventListener('click', () => {
+                var limit = document.getElementById('number-of-users').value
+                fetch(`https://jsonplaceholder.typicode.com/users?_limit=${limit}`)
+                .then(res => res.json())
+                .then((data) => {
+                    console.log(data)
+                    let load = '<img src="loading.gif" class="loader" alt="Loading...">'
+                    document.getElementById('user-list').innerHTML = load
+                    setTimeout(() => {
+                        let result = '<h3 style="text-decoration: underline;">User List</h3>'
+                        result += '<div>'
+                        data.forEach((user) => {
+                            result += `<div class="user-container"> 
+                                          <div class="user-box">
+                                             <p>${user.name}</p>
+                                             <a href="${user.website}" target="_blank">${user.website}</a><br>
+                                             <a href="mailto:${user.email}?subject=Hello!">${user.email}</a><br>
+                                             <a href="tel:${user.phone}">${user.phone}</a>
+                                          </div>
+                                      </div>`
+                        })
+                        result += '</div>'
+                        document.getElementsByClassName('loader')[0].classList.add('hide')
+                        document.getElementById('user-list').innerHTML = result
+                    }, limit + '000')
+                })
+                .catch((err) => { 
+                    let errorMsg = `<div style="margin-top: 50px;">
+                                      <h1>( ͡° ͜ʖ ͡°)</h1>
+                                      <h2>Oops something went wrong</h2>
+                                      <h3 style="color: orangered;">${err}</h3>
+                                   </div>`
+                    document.getElementById('user-list').innerHTML = errorMsg
+                })
+            }))
+            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Mid ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            function ref() {
+                window.location.reload(true)
+            }
+            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Pokemons ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            
+        </script>
+    </body>
+</html>
+
+<!-- ಠ_ಠ -->
+<!-- https://www.piliapp.com/emoticon/shrug/ -->
+
+
+
+
+
+
+
+
+
+
+

@@ -27,15 +27,19 @@
             .hide {
                 display: none;
             }
-            .inner-container {
+            .user-container,
+            .poke-container {
                 display: inline-flex;
             }
-            .inner-box {
+            .user-box {
                 margin: 5px;
-                padding-bottom: 20px;
                 font-size: 18px;
+                padding-bottom: 20px;
                 text-transform: capitalize;
                 border: 2px solid rgb(31, 31, 31);
+            }
+            .poke-box {
+                text-transform: capitalize;
             }
             a {
                 text-decoration: none;
@@ -56,7 +60,7 @@
         <div class="container">
             <div id="get-pokemons" class="btn">
                 <span>display</span>
-                <input type="number" value="10" min="1" max="10" id="number-of-pokemons" style="width: 35px;">
+                <input type="number" min="1" max="10" id="number-of-pokemons" style="width: 35px;">
                 <span>pokemons</span>
             </div>
             <div id="pokemon-list"></div>
@@ -73,13 +77,13 @@
                     setTimeout(() => {
                         let result = '<div>'
                         data.forEach((user) => {
-                            result += `<div class="inner-container"> 
-                                          <div class="inner-box">
+                            result += `<div class="user-container"> 
+                                          <div class="user-box">
                                             <div style="width: 300px;">
-                                              <p>${user.name}</p>
-                                              <a href="${user.website}" target="_blank">${user.website}</a><br>
-                                              <a href="mailto:${user.email}?subject=Hello!">${user.email}</a><br>
-                                              <a href="tel:${user.phone}">${user.phone}</a>
+                                                    <p>${user.name}</p>
+                                                    <a href="${user.website}" target="_blank">${user.website}</a><br>
+                                                    <a href="mailto:${user.email}?subject=Hello!">${user.email}</a><br>
+                                                    <a href="tel:${user.phone}">${user.phone}</a>
                                             </div>
                                           </div>
                                       </div>`
@@ -98,44 +102,50 @@
                     document.getElementById('user-list').innerHTML = errorMsg
                 })
             })
-            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Pokemons ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                          
+            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Pokemons ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            window.onload = () => {
+                fetch('https://pokeapi.co/api/v2/pokemon?limit=10')
+                .then(res => res.json()).then((data) => {
+                    document.getElementById('number-of-pokemons').value = data.results.length
+                    console.log('Number of Pokemons: ' + data.results.length)
+                }).catch(err => console.error(err))
+             }                         
              document.getElementById('get-pokemons').addEventListener('click', () => {
-                let limit = document.getElementById('number-of-pokemons').value
+                function randomNumber(min, max) {  
+                    return Math.floor(Math.random() * (max - min + 1) + min)
+                }
+                let pokemons = document.getElementById('number-of-pokemons').value
                 let result = '<div>'
-                fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${limit}`)
-                     .then(res => res.json())
-                     .then((data) => {
-                        console.log(data)
-                        let load = '<img src="pokemon-loading.gif" alt="Loading..." id="pokemon-loader" class="loader">'
-                        document.getElementById('pokemon-list').innerHTML = load
-                        setTimeout(() => {
-                            let result = '<div>'
-                            for(let x = 0; x < data.results.length; x++) {
-                                result += `<div class="inner-container"> 
-                                    <div class="inner-box">
-                                        <div style="width: 300px;">
-                                            <h3>${data.results[x].name}</h3>
-                                            <img src="" alt="">
-                                        </div>
-                                    </div>
-                                </div>`
-                            }
-                            result += '</div>'
-                            document.getElementById('pokemon-loader').classList.add('hide')
-                            document.getElementById('pokemon-list').innerHTML = result
-                        }, limit + '00')
-                    })
-                    .catch((err) => { 
-                        let errorMsg = `<div style="margin-top: 50px;">
-                                          <h1>ಠ_ಠ</h1>
-                                          <h2>Oops something went wrong</h2>
-                                          <h3 style="color: orangered;">${err}</h3>
-                                       </div>`
-                        document.getElementById('pokemon-list').innerHTML = errorMsg
-                    })
-                })
+                    for(let x = 1; x <= pokemons; x++) {
+                        fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber(1, 151)}`)
+                        .then(res => res.json())
+                        .then((data) => {
+                            let load = '<img src="pokemon-loading.gif" alt="Loading..." id="pokemon-loader" class="loader">'
+                            document.getElementById('pokemon-list').innerHTML = load
+                            console.log(data)
+                                    result += `<div class="poke-container"> 
+                                                    <div class="poke-box">
+                                                        <div style="width: 300px;">
+                                                            <h3>${data.forms[0].name}</h3>
+                                                            <img src="${data.sprites.front_default}" alt="${data.species.name}">`
+                                                            /*
+                                                             * for(let y = 0; y < data.abilities.length; y++) {
+                                                             *   result +=`<ul> 
+                                                             *               <li>${data.abilities[y].ability.name}</li>
+                                                             *             </ul>`
+                                                             * }
+                                                             */
+                                             result += `</div>
+                                                    </div>
+                                               </div>`
+                        })
+                    }
+                    setTimeout(() => {
+                        document.getElementById('pokemon-loader').classList.add('hide')
+                        document.getElementById('pokemon-list').innerHTML = result
+                    }, pokemons + '00')
+                result += '</div>'
+            })
         </script>
     </body>
 </html>
-
-<!-- https://www.piliapp.com/emoticon/shrug/ -->

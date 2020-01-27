@@ -1,22 +1,20 @@
-<!DOCTYPEhtml>
+<!DOCTYPE html>
 <html>
     <head>
+        <title>Fetch 'Em</title>
         <style>
             .container {
                 float: left;
                 width: 630px;
                 height: 700px;
                 padding: 100px;
-                margin: 10px 0 0 70px;
-                display: flex;
-                justify-content: center;
-                flex-direction: column;
+                margin: 10px 0 0 30px;
                 text-align: center;
                 border: 2px solid rgb(31, 31, 31);
+                border-radius: 5px;
             }
             .btn {
-                position: absolute;
-                margin: -420px 0 0 240px;
+                margin: -60px 0 40px 20px;
                 text-transform: uppercase;
                 font-weight: 600;
             }
@@ -37,9 +35,14 @@
                 padding-bottom: 20px;
                 text-transform: capitalize;
                 border: 2px solid rgb(31, 31, 31);
+                border-radius: 5px;
             }
             .poke-box {
+                margin: 5px;
+                padding: 5px;
                 text-transform: capitalize;
+                border: 2px solid rgb(31, 31, 31);
+                border-radius: 5px;
             }
             a {
                 text-decoration: none;
@@ -60,13 +63,13 @@
         <div class="container">
             <div id="get-pokemons" class="btn">
                 <span>display</span>
-                <input type="number" min="1" max="10" id="number-of-pokemons" style="width: 35px;">
+                <input type="number" min="1" max="20" id="number-of-pokemons" style="width: 35px;">
                 <span>pokemons</span>
             </div>
             <div id="pokemon-list"></div>
         </div>
         <script>
-            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Users ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Users ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
             document.getElementById('get-users').addEventListener('click', () => {
                 let limit = document.getElementById('number-of-users').value
                 fetch(`https://jsonplaceholder.typicode.com/users?_limit=${limit}`)
@@ -102,22 +105,19 @@
                     document.getElementById('user-list').innerHTML = errorMsg
                 })
             })
-            // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Pokemons ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Pokemons ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
             window.onload = () => {
-                fetch('https://pokeapi.co/api/v2/pokemon?limit=10')
+                fetch('https://pokeapi.co/api/v2/pokemon')
                 .then(res => res.json()).then((data) => {
                     document.getElementById('number-of-pokemons').value = data.results.length
                     console.log('Number of Pokemons: ' + data.results.length)
                 }).catch(err => console.error(err))
              }                         
              document.getElementById('get-pokemons').addEventListener('click', () => {
-                function randomNumber(min, max) {  
-                    return Math.floor(Math.random() * (max - min + 1) + min)
-                }
                 let pokemons = document.getElementById('number-of-pokemons').value
                 let result = '<div>'
                     for(let x = 1; x <= pokemons; x++) {
-                        fetch(`https://pokeapi.co/api/v2/pokemon/${randomNumber(1, 151)}`)
+                        fetch(`https://pokeapi.co/api/v2/pokemon/${x}`)
                         .then(res => res.json())
                         .then((data) => {
                             let load = '<img src="pokemon-loading.gif" alt="Loading..." id="pokemon-loader" class="loader">'
@@ -125,16 +125,18 @@
                             console.log(data)
                                     result += `<div class="poke-container"> 
                                                     <div class="poke-box">
-                                                        <div style="width: 300px;">
+                                                        <div>
                                                             <h3>${data.forms[0].name}</h3>
                                                             <img src="${data.sprites.front_default}" alt="${data.species.name}">`
-                                                            /*
-                                                             * for(let y = 0; y < data.abilities.length; y++) {
-                                                             *   result +=`<ul> 
-                                                             *               <li>${data.abilities[y].ability.name}</li>
-                                                             *             </ul>`
-                                                             * }
-                                                             */
+                                                       /*   result += '<ul>'
+                                                        *   for(let y = 0; y < data.abilities.length; y++) {
+                                                        *      result += `<li>
+                                                        *                    ${data.abilities[y].ability.name}
+                                                        *                 </li>`     
+                                                        *   } 
+                                                        *
+                                                        *   result += '</ul>'
+                                                        */
                                              result += `</div>
                                                     </div>
                                                </div>`

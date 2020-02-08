@@ -49,6 +49,7 @@
             .user-container,
             .poke-container {
                 display: inline-flex;
+                font-weight: 600;
             }
             .user-box {
                 margin: 5px;
@@ -66,6 +67,7 @@
                 border-radius: 5px;
             }
             a {
+                color: rgb(31, 31, 31);
                 text-decoration: none;
             }
             @media only screen and (min-width: 1920px) {
@@ -155,21 +157,23 @@
                             let load = '<img src="pokemon-loading.gif" alt="Loading..." id="pokemon-loader" class="loader">'
                             document.getElementById('pokemon-list').innerHTML = load
                                     result += `<div class="poke-container"> 
-                                                    <div class="poke-box">
-                                                        <div>
-                                                            <h3>${data.forms[0].name}</h3>
-                                                            <img src="${data.sprites.front_default}" alt="${data.species.name}">`
-                                                       /*   result += '<ul>'
-                                                        *   for(let y = 0; y < data.abilities.length; y++) {
-                                                        *      result += `<li>
-                                                        *                    ${data.abilities[y].ability.name}
-                                                        *                 </li>`     
-                                                        *   } 
-                                                        *
-                                                        *   result += '</ul>'
-                                                        */
-                                             result += `</div>
-                                                    </div>
+                                                    <a href="https://www.pokemon.com/us/pokedex/${data.forms[0].name}" target="_blank">
+                                                        <div class="poke-box">
+                                                            <div>
+                                                                <h3>${data.forms[0].name}</h3>
+                                                                <img src="${data.sprites.front_default}" alt="${data.species.name}">`
+                                                        /*   result += '<ul>'
+                                                         *   for(let y = 0; y < data.abilities.length; y++) {
+                                                         *      result += `<li>
+                                                         *                    ${data.abilities[y].ability.name}
+                                                         *                 </li>`     
+                                                         *   } 
+                                                         *
+                                                         *   result += '</ul>'
+                                                         */
+                                                result += `</div>
+                                                        </div>
+                                                    </a>
                                                </div>`
                         })
                     }

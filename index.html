@@ -175,7 +175,7 @@
                                                         </div>
                                                     </a>
                                                </div>`
-                        })
+                        }).catch(err => document.getElementById('pokemon-list').innerHTML = `<h3>${err}</h3>`)
                     }
                     setTimeout(() => {
                         document.getElementById('pokemon-loader').classList.add('hide')

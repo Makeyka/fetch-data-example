@@ -6,6 +6,13 @@
             html {
                 height: 100%;
                 background-image: linear-gradient(10deg, #93a5cf, #e4efe9);
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-attachment: fixed;
+                background-size: cover;
+                flex-direction: column;
+                align-items: center;
+                display: flex;
             }
             .main {
                 display: flex;
@@ -16,12 +23,12 @@
                 width: 630px;
                 height: 700px;
                 padding: 100px;
-                margin: 10px 0 0 30px;
+                margin: 10px 0 0 -100px;
                 text-align: center;
             }
             .btn {
                 padding: 5px;
-                margin: -60px 0 40px 20px;
+                margin: -60px 0 40px 5px;
                 font-weight: 600;
                 text-transform: uppercase;
                 background: #35cae4;
@@ -32,12 +39,12 @@
             }
             input {
                 font-weight: 600;
-                background: #35cae4;
+                background: #35CAE4;
                 border: 2px solid rgb(31, 31, 31);
                 border-radius: 5px;
             }
             .btn:hover {
-                background: #38d5f1;
+                background: #38D5F1;
             }
             .loader {
                 width: 400px;
@@ -56,27 +63,53 @@
                 font-size: 18px;
                 padding-bottom: 20px;
                 text-transform: capitalize;
+                background-image: linear-gradient(#a3bded, #6991c7);
                 border: 2px solid rgb(31, 31, 31);
                 border-radius: 5px;
+            }
+            .user-box a {
+                color: hsl(240, 76%, 40%);
+            }
+            .user-box a:hover {
+                color: blue;
             }
             .poke-box {
                 margin: 5px;
                 padding: 5px;
                 text-transform: capitalize;
+                background-image: linear-gradient(#6991c7, #a3bded);
                 border: 2px solid rgb(31, 31, 31);
                 border-radius: 5px;
+                transition: background 500ms;
+            }
+            .poke-box:hover {
+                background: skyblue;
             }
             a {
                 color: rgb(31, 31, 31);
                 text-decoration: none;
             }
-            @media only screen and (min-width: 1920px) {
+            #phone {
+                color: #0e9c0e;
+            }
+            #phone:hover {
+                color: #11a711;
+            }
+            #email {
+                color: #be1c1c;
+            }
+            #email:hover {
+                color: #cc1414;
+            }
+            @media only screen and (min-width: 4320px) {
                 .main {
                     display: block;
                 }
-                .container {
-                    border: 2px solid rgb(31, 31, 31);
-                    border-radius: 5px;
+                p, a {
+                    overflow-wrap: break-word;
+                }
+                .user-box {
+                    height: 310px;
                 }
             }
         </style>
@@ -119,12 +152,12 @@
                                             <div style="width: 300px;">
                                                     <p>${user.name}</p>
                                                     <a href="${user.website}" target="_blank">${user.website}</a><br>
-                                                    <a href="mailto:${user.email}?subject=Hello!">${user.email}</a><br>
-                                                    <a href="tel:${user.phone}">${user.phone}</a>
+                                                    <a href="mailto:${user.email}?subject=Hello!" id="email">${user.email}</a><br>
+                                                    <a href="tel:${user.phone}" id="phone">${user.phone}</a>
                                             </div>
                                           </div>
                                       </div>`
-                        })
+                        }) 
                         result += '</div>'
                         document.getElementById('user-loader').classList.add('hide')
                         document.getElementById('user-list').innerHTML = result
@@ -140,18 +173,22 @@
                 })
             })
             /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Pokemons ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+            const POKEMON_LIST = document.getElementById('pokemon-list')
             window.onload = () => {
                 fetch('https://pokeapi.co/api/v2/pokemon')
                 .then(res => res.json()).then((data) => {
                     document.getElementById('number-of-pokemons').value = data.results.length
                     console.log('Number of Pokemons: ' + data.results.length)
-                }).catch(err => console.error(err))
+                }).catch((err) => {
+                    document.getElementById('number-of-pokemons').value = 1
+                    console.error(err)
+                })
              }                         
-             document.getElementById('get-pokemons').addEventListener('click', async () => {
+             document.getElementById('get-pokemons').addEventListener('click', () => {
                 let pokemons = document.getElementById('number-of-pokemons').value
                 let result = '<div>'
                     for(let x = 1; x <= pokemons; x++) {
-                        await fetch(`https://pokeapi.co/api/v2/pokemon/${x}`)
+                        fetch(`https://pokeapi.co/api/v2/pokemon/${x}`)
                         .then(res => res.json())
                         .then((data) => {
                             let load = '<img src="pokemon-loading.gif" alt="Loading..." id="pokemon-loader" class="loader">'
@@ -175,14 +212,24 @@
                                                         </div>
                                                     </a>
                                                </div>`
-                        }).catch(err => document.getElementById('pokemon-list').innerHTML = `<h3>${err}</h3>`)
+                        })
+                        .catch((err) => { 
+                            let errorMsg = `<div style="margin-top: 50px;">
+                                              <h1>( ͡° ͜ʖ ͡°)</h1>
+                                              <h2>Oops something went wrong</h2>
+                                              <h3 style="color: orangered;">${err}</h3>
+                                           </div>`
+                            POKEMON_LIST.innerHTML = errorMsg
+                        })
                     }
                     setTimeout(() => {
                         document.getElementById('pokemon-loader').classList.add('hide')
-                        document.getElementById('pokemon-list').innerHTML = result
+                        POKEMON_LIST.innerHTML = result
                     }, pokemons + '00')
                 result += '</div>'
             })
         </script>
     </body>
 </html>
+
+<!-- TODO: Make pokemons turn on hover -->

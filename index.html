@@ -137,9 +137,9 @@
         </div>
         <script>
             /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Users ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
-            document.getElementById('get-users').addEventListener('click', async () => {
+            document.getElementById('get-users').addEventListener('click', () => {
                 let limit = document.getElementById('number-of-users').value
-                await fetch(`https://jsonplaceholder.typicode.com/users?_limit=${limit}`)
+                fetch(`https://jsonplaceholder.typicode.com/users?_limit=${limit}`)
                 .then(res => res.json())
                 .then((data) => {
                     let load = '<img src="loading.gif" alt="Loading..." id="user-loader" class="loader">'

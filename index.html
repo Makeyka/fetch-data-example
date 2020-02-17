@@ -114,6 +114,9 @@
                 }
             }
             @media only screen and (max-width: 1439px) {
+                html {
+                    height: 150%;
+                }
                 .main {
                     display: flex;
                     flex-direction: column;
@@ -203,10 +206,11 @@
                             document.getElementById('pokemon-list').innerHTML = load
                                     result += `<div class="poke-container"> 
                                                     <a href="https://www.pokemon.com/us/pokedex/${data.forms[0].name}" target="_blank">
-                                                        <div class="poke-box">
+                                                        <div id="pokemon-${x}" class="poke-box">
                                                             <div>
                                                                 <h3>${data.forms[0].name}</h3>
-                                                                <img src="${data.sprites.front_default}" alt="${data.species.name}">`
+                                                                <img src="${data.sprites.front_default}" alt="${data.species.name}" id="front-img-${x}">
+                                                                <img src="${data.sprites.back_default}" alt="${data.species.name}" id="back-img-${x}" class="hide">`
                                                         /*   result += '<ul>'
                                                          *   for(let y = 0; y < data.abilities.length; y++) {
                                                          *      result += `<li>

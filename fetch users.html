@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Fetch Users</title>
+		<style>
+			.center {
+				margin: 10px;
+				padding: 30px;
+				width: 520px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				border: 2px solid;
+			}
+			.center h2 {
+				font-family: Consolas, sans-serif;
+				text-decoration: underline;
+			}
+			.center h2:hover{
+			  color: #f00;
+			  transition: all 0.5s ease;
+			}
+			.center span {
+				margin: -5px;
+				font-size: 1.3em;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				font-family: Fira Code, sans-serif;
+			}
+			a { text-decoration: none; }
+			@media only screen and (max-width: 600px) {
+				.center span {
+					font-size: 1em;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script>
+			var root = document.querySelector('#root')
+			fetch('https://gorest.co.in/public-api/users')
+			  .then(res => res.json())
+			  .then((json) => {
+				  let html = '<div style="text-align: center;">'
+				  json.data.forEach((user) => {
+					html += 
+					`
+						<div style="display: inline-block;">
+							<div id="user-${user.id}" class="center">
+								<div>
+									<h2>ID</h2>
+									<span>${user.id}</span>
+
+									<h2>Name</h2>
+									<span>${user.name}</span>
+
+									<h2>Status</h2>
+									<span style="color:${user.status == 'Active' ? "green" : "red"};">
+										${user.status}
+									</span>
+
+									<h2>Email</h2>
+									<span>
+										<a href="mailto:${user.email}" target="_blank">
+											${user.email}
+										</a>
+									</span>
+								</div>
+							</div>
+						</div>
+					`
+				  })
+				  html += '</div>'
+				  root.innerHTML = html
+			}).catch((error) => {
+				root.innerHTML =
+				`
+					<div style="text-align: center; margin-top: 10%; font-family: Consolas;">
+						<h1>¯\\_( ͡❛ ͜ʖ ͡❛)_/¯</h1>
+						<h2>There was a problem with fetching the users</h1>
+						<h3 style="color: red;">${error}</h1>
+					</div>
+				`
+			})
+		</script>
+	</body>
+</html>

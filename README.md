@@ -1,1 +1,1 @@
-[Fetch 'Em](https://makeyka.github.io/fetch-em/)
+[Fetch 'Em](fetch-em.netlify.com)

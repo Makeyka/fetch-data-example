@@ -68,6 +68,10 @@
                 border: 2px solid rgb(31, 31, 31);
                 border-radius: 5px;
             }
+            .user-box:hover {
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                transition: all 0.5s ease-in-out;
+            }
             .user-box a {
                 color: hsl(240, 76%, 40%);
             }
@@ -90,17 +94,20 @@
                 color: rgb(31, 31, 31);
                 text-decoration: none;
             }
-            #phone {
-                color: #0e9c0e;
+            #icon {
+                font-size: 25px;
+                position: absolute;
+                left: 47.7%;
             }
-            #phone:hover {
-                color: #11a711;
+            #icon:hover {
+                font-size: 28px;
+                transition: all 0.5s ease;
             }
-            #email {
-                color: #be1c1c;
+            #phone, #email, #site {
+                color: rgb(13, 13, 13);
             }
-            #email:hover {
-                color: #cc1414;
+            #phone:hover, #email:hover, #site:hover {
+                color: rgb(31, 31, 31);
             }
             @media only screen and (min-width: 4320px) {
                 .main {
@@ -113,7 +120,7 @@
                     height: 310px;
                 }
             }
-            @media only screen and (max-width: 1439px) {
+            @media only screen and (max-width: 1440px) {
                 html {
                     height: 150%;
                 }
@@ -122,11 +129,22 @@
                     flex-direction: column;
                     align-items: center;
                 }
+                #icon {
+                    left: 46%;
+                }
+            }
+            @media only screen and (max-width: 800px) {
+                #icon {
+                    left: 43%;
+                }
             }
         </style>
     </head>
     <body>
         <div class="main">
+            <div style="text-align: center;">
+                <a href="/fetch.html" target="_blank" id="icon">( ❛ ͜ʖ ❛ )</a>
+            </div>
             <!-- Users -->
             <div class="container">
                 <div id="get-users" class="btn">
@@ -161,8 +179,8 @@
                             result += `<div class="user-container"> 
                                           <div class="user-box">
                                              <div style="width: 300px;">
-                                                <p style="text-decoration: underline;">${user.name}</p>
-                                                <a href="${user.website}" target="_blank">${user.website}</a><br>
+                                                <p style="text-decoration: underline; color: blue;">${user.name}</p>
+                                                <a href="${user.website}" target="_blank" id="site">${user.website}</a><br>
                                                 <a href="mailto:${user.email}?subject=Hello!" id="email">${user.email}</a><br>
                                                 <a href="tel:${user.phone}" id="phone">${user.phone}</a>
                                              </div>

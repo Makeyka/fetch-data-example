@@ -12,6 +12,7 @@
 				justify-content: center;
 				flex-direction: column;
 				border: 2px solid;
+				animation: fadeIn 2s;
 			}
 			.center h2 {
 				font-family: Consolas, sans-serif;
@@ -30,6 +31,13 @@
 				transition: all 0.5s ease-in-out;
 			}
 			a { text-decoration: none; }
+			@keyframes fadeIn {
+				from { 
+				    opacity: 0;
+				} to { 
+				    opacity: 1; 
+				}
+		    	}
 			@media only screen and (max-width: 600px) {
 				.center span {
 					font-size: 1em;
